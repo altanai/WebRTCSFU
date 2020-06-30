@@ -1,0 +1,87 @@
+./janus --nat-1-1=54.193.51.199 -C janus.plugin.videoroom.jcfg
+Janus commit: bd7798eb3a6b5c4c5f0f9aa6b2fed0cc2e0f5001
+Compiled on:  Wed Jun 24 05:19:57 UTC 2020
+
+Logger plugins folder: /opt/janus/lib/janus/loggers
+[WARN] 	Couldn't access logger plugins folder...
+---------------------------------------------------
+  Starting Meetecho Janus (WebRTC Server) v0.10.2
+---------------------------------------------------
+
+Checking command line arguments...
+Debug/log level is 4
+Debug/log timestamps are disabled
+Debug/log colors are enabled
+Using 172.31.13.206 as local IP...
+[WARN] Token based authentication disabled
+Initializing recorder code
+Using nat_1_1_mapping for public IP: 54.193.51.199
+Initializing ICE stuff (Full mode, ICE-TCP candidates disabled, half-trickle, IPv6 support disabled)
+TURN REST API backend: (disabled)
+Crypto: OpenSSL >= 1.1.0
+[WARN] No cert/key specified, autogenerating some...
+Fingerprint of our certificate: F0:9B:3D:C6:D2:5D:4C:7D:64:AD:33:D3:B9:10:2B:97:41:13:F2:C1:96:DC:E6:21:40:75:F4:6B:47:36:4C:12
+[WARN] Data Channels support not compiled
+[WARN] Event handlers support disabled
+Plugins folder: /opt/janus/lib/janus/plugins
+Loading plugin 'libjanus_textroom.so'...
+[WARN] Data channels support not compiled, disabling TextRoom plugin
+[WARN] The 'janus.plugin.textroom' plugin could not be initialized
+Loading plugin 'libjanus_streaming.so'...
+JANUS Streaming plugin initialized!
+Loading plugin 'libjanus_voicemail.so'...
+JANUS VoiceMail plugin initialized!
+Loading plugin 'libjanus_echotest.so'...
+JANUS EchoTest plugin initialized!
+Loading plugin 'libjanus_sip.so'...
+Joining Janus requests handler thread
+Sessions watchdog started
+JANUS SIP plugin initialized!
+Loading plugin 'libjanus_recordplay.so'...
+JANUS Record&Play plugin initialized!
+Loading plugin 'libjanus_videoroom.so'...
+JANUS VideoRoom plugin initialized!
+Loading plugin 'libjanus_videocall.so'...
+JANUS VideoCall plugin initialized!
+Loading plugin 'libjanus_audiobridge.so'...
+JANUS AudioBridge plugin initialized!
+Loading plugin 'libjanus_nosip.so'...
+JANUS NoSIP plugin initialized!
+Transport plugins folder: /opt/janus/lib/janus/transports
+Loading transport plugin 'libjanus_pfunix.so'...
+[WARN] Unix Sockets server disabled (Janus API)
+[WARN] Unix Sockets server disabled (Admin API)
+[WARN] No Unix Sockets server started, giving up...
+[WARN] The 'janus.transport.pfunix' plugin could not be initialized
+Loading transport plugin 'libjanus_http.so'...
+HTTP webserver started (port 8088, /janus path listener)...
+[WARN] HTTPS webserver disabled
+[WARN] Admin/monitor HTTP webserver disabled
+[WARN] Admin/monitor HTTPS webserver disabled
+JANUS REST (HTTP/HTTPS) transport plugin initialized!
+[WARN] libnice version outdated: 0.1.14 installed, at least 0.1.16 recommended. Notice the installed version was checked at build time: if you updated libnice in the meanwhile, re-configure and recompile to get rid of this warning
+HTTP transport timer started
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[ERR] [transports/janus_http.c:janus_http_handler:1347] Invalid session (null)
+[ERR] [transports/janus_http.c:janus_http_handler:1347] Invalid session (null)

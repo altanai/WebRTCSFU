@@ -1,0 +1,26 @@
+{
+  "name": "janus_experiments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "admin.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AmpleChat/Janus_experiments.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AmpleChat/Janus_experiments/issues"
+  },
+  "homepage": "https://github.com/AmpleChat/Janus_experiments#readme",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "node-static": "^0.7.11"
+  }
+}
