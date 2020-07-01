@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Janus WebRTC Server: Echo Test</title>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <script type="text/javascript" src="janus.js"></script>
@@ -32,6 +36,10 @@
 </head>
 <body>
 
+<a href="https://github.com/meetecho/janus-gateway"><img
+        style="position: absolute; top: 0; left: 0; border: 0; z-index: 1001;"
+        src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+
 <nav class="navbar navbar-default navbar-static-top">
 </nav>
 
@@ -46,6 +54,33 @@
             <div class="container" id="details">
                 <div class="row">
                     <div class="col-md-12">
+                        <h3>Demo details</h3>
+                        <p>This Echo Test demo just blindly sends you back whatever you
+                            send to it. You're basically attached to yourself, and so your audio
+                            and video you send to Janus are echoed back to you. The same
+                            is done for RTCP packets as well, with the information properly updated.</p>
+                        <p>The demo also provides a few controls to manipulate the media
+                            before you send them. You can mute audio and video, for instance,
+                            which will tell the server to drop the frames and not echo them
+                            back to you. You can also try and cap the bitrate: such control
+                            will tell the server to manipulate the RTCP REMB packets passing
+                            through, in order to simulate a bandwidth limitation. In case
+                            you're interested in testing simulcasting, add the <code>?simulcast=true</code>
+                            query string to the url of this page and reload it: buttons will appear
+                            to allow you to try and switch between lower and higher quality
+                            versions of the video you're capturing: notice that you may have
+                            to increase the bandwidth indicator to have the higher quality
+                            versions appear, as the browser will not encode them otherwise.</p>
+                        <p>Finally, this demo also includes Data Channels: whatever you
+                            write in the text box under your local video, will be sent via
+                            Data Channels to the plugins, modified by adding a fixed prefix,
+                            and sent back to you in the text area below the remote video.</p>
+                        <div class="alert alert-info">This demo, as all the others, for the
+                            sake of simplicity accesses the default devices you have available on
+                            your machine. If you're interested in a demo that shows you how you
+                            can select specific devices with <code>janus.js</code>, open the
+                            <a class="alert-link" href="extras/devicetest.html">Devices</a> demo instead.
+                        </div>
                         <p>Press the <code>Start</code> button above to launch the demo.</p>
                     </div>
                 </div>
