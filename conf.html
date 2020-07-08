@@ -1,0 +1,346 @@
+<!--Created by IntelliJ IDEA.-->
+<!--User: Altanai ( @altanai)-->
+<!--Date: 2020-->
+<!--Time: 12:54 PM-->
+<!--Brightchats ( https://www.brightchats.com/) - conference-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#5c66bf">
+    <title>BrightChats</title>
+    <link rel="shortcut icon" href="dist/img/favicon.png" type="image/png"/>
+    <link rel="apple-touch-icon" href="dist/img/favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        #ftco-loader {
+            position: fixed;
+            width: 96px;
+            height: 96px;
+            left: 50%;
+            top: 50%;
+            -webkit-transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, .9);
+            -webkit-box-shadow: 0 24px 64px rgba(0, 0, 0, .24);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, .24);
+            border-radius: 16px;
+            opacity: 0;
+            visibility: hidden;
+            -webkit-transition: opacity .2s ease-out, visibility 0s linear .2s;
+            -o-transition: opacity .2s ease-out, visibility 0s linear .2s;
+            transition: opacity .2s ease-out, visibility 0s linear .2s;
+            z-index: 1000
+        }
+
+        #ftco-loader.fullscreen {
+            padding: 0;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transform: none;
+            -ms-transform: none;
+            transform: none;
+            background-color: #fff;
+            border-radius: 0;
+            -webkit-box-shadow: none;
+            box-shadow: none
+        }
+
+        #ftco-loader.show {
+            -webkit-transition: opacity .4s ease-out, visibility 0s linear 0s;
+            -o-transition: opacity .4s ease-out, visibility 0s linear 0s;
+            transition: opacity .4s ease-out, visibility 0s linear 0s;
+            visibility: visible;
+            opacity: 1
+        }
+
+        #ftco-loader .circular {
+            -webkit-animation: loader-rotate 2s linear infinite;
+            animation: loader-rotate 2s linear infinite;
+            position: absolute;
+            left: calc(50% - 24px);
+            top: calc(50% - 24px);
+            display: block;
+            -webkit-transform: rotate(0);
+            -ms-transform: rotate(0);
+            transform: rotate(0)
+        }
+
+        #ftco-loader .path {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            -webkit-animation: loader-dash 1.5s ease-in-out infinite;
+            animation: loader-dash 1.5s ease-in-out infinite;
+            stroke-linecap: round
+        }
+
+        @-webkit-keyframes loader-rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes loader-rotate {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg)
+            }
+        }
+
+        @-webkit-keyframes loader-dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -136px
+            }
+        }
+
+        @keyframes loader-dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -136px
+            }
+        }
+
+        #ftco-loader span {
+            position: absolute;
+            top: 60%;
+            width: 100%;
+            text-align: center;
+            color: rgb(97, 90, 168);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<!-- notify bar -->
+<div class="row alertDiv" id="alertBox" hidden="true"></div>
+
+<!-- main contents starts -->
+<main class="mainDiv container-fluid conf-maindiv" id="mainDiv" role="main">
+
+    <div class="row">
+
+        <!-- visible when remote connects more than 2 users -->
+        <div id="remote_sidebar_left" class="col-2" hidden >
+            <div class="chat-window video-window">
+                <div class="tab-content chat-contents">
+                    <div class="content-full tab-pane show active" id="chats_tab">
+
+                        <!--  Video for peer 3 -->
+                        <div class="col-12 text-center justify-content-center remote-video remote mt-2" hidden>
+                            <div class="video-inner-wrapper">
+                                <video class="video-class" name="otherConferenceVideo3" hidden></video>
+                            </div>
+                            <div id="remotetime3" class="timeBox">
+                                <span class="timeclass" name="remoteTimeZoneArea3" title="Time Zone"></span>
+                                <span class="timeclass" name="remoteTimeArea3" class="label label-default"
+                                      title="Time of Remote"></span>
+                            </div>
+                        </div>
+
+                        <!--  Video for peer 4 -->
+                        <div class="col-12 text-center justify-content-center remote-video remote mt-2" hidden>
+                            <div class="video-inner-wrapper">
+                                <video class="video-class" name="otherConferenceVideo4"  hidden></video>
+                            </div>
+                            <div id="remotetime4" class="timeBox">
+                                <span class="timeclass" name="remoteTimeZoneArea4" title="Time Zone"></span>
+                                <span class="timeclass" name="remoteTimeArea4" class="label label-default"
+                                      title="Time of Remote"></span>
+                            </div>
+                        </div>
+
+                        <!--  Video for peer 5 -->
+                        <div class="col-12 text-center justify-content-center remote-video remote mt-2" hidden>
+                            <div class="video-inner-wrapper">
+                                <video class="video-class" name="otherConferenceVideo5"  hidden></video>
+                            </div>
+                            <div id="remotetime3" class="timeBox">
+                                <span class="timeclass" name="remoteTimeZoneArea5" title="Time Zone"></span>
+                                <span class="timeclass" name="remoteTimeArea5" class="label label-default"
+                                      title="Time of Remote"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- widgets displayed -->
+        <div id="widget_centralarea" class="col-lg-10" area="expand" hidden>
+            <ul class="nav nav-tabs local-list" role="tablist">
+                <li id="draw-list" role="presentation" class="hidden">
+                    <a href="#draw" aria-controls="draw" role="tab" data-toggle="tab" class="" aria-selected="false">
+                        <span class="amplechat-icon-pencil"></span> Draw
+                    </a>
+                </li>
+                <li id="fileShare-list" role="presentation" class="hidden">
+                    <a href="#fileShare" aria-controls="fileShare" role="tab" data-toggle="tab" class=""
+                       aria-selected="false">
+                        <span class="icon-ample-file-share-new-01"></span> File Share
+                    </a>
+                </li>
+                <li id="screenShare-list" role="presentation" class="hidden">
+                    <a href="#screenShare" aria-controls="screenShare" role="tab" data-toggle="tab" class=""
+                       aria-selected="true">
+                        <span class="amplechat-icon-screen-sharing"></span> Screen Share
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+
+                <!-- Draw -->
+                <div role="tabpanel" class="tab-pane" id="draw">
+                </div>
+
+                <!-- file share -->
+                <div role="tabpanel" class="tab-pane" id="fileShare">
+                </div>
+
+                <!-- screen share -->
+                <div role="tabpanel" class="tab-pane" id="screenShare">
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- when no remote -->
+        <div id="singleVideoContainer" autoplay="autoplay" class="video-remote-section-webrtc">
+            <video class="video-class" name="myAloneVideo" muted="true"></video>
+        </div>
+
+        <!-- when remote connects upto 2 users -->
+        <div id="remote_sidebar_right" class="col-2" hidden>
+            <div class="chat-window video-window">
+                <div class="tab-content chat-contents">
+                    <div class="content-full tab-pane show active" id="chats_tab">
+                        <div class="chat-window">
+
+                            <!--  Video for Me -->
+                            <div class="col-12 text-center justify-content-center remote-video local mt-2" hidden>
+                                <div class="video-inner-wrapper">
+                                    <video class="video-class" name="myConferenceVideo" muted="true" hidden></video>
+                                </div>
+                                <div id="localtime" class="timeBox">
+                                    <span class="timeclass" name="currentTimeZoneArea" title="Time Zone"></span>
+                                    <span class="timeclass" name="currentTimeArea" class="label label-default"
+                                          title="Current Local Time"></span>
+                                </div>
+                            </div>
+
+                            <!--  Video for peer 1 -->
+                            <div class="col-12 text-center justify-content-center remote-video remote mt-2" hidden>
+                                <div class="video-inner-wrapper">
+                                    <video class="video-class" name="otherConferenceVideo1" hidden></video>
+                                </div>
+                                <div id="remotetime1" class="timeBox">
+                                    <span class="timeclass" name="remoteTimeZoneArea1" title="Time Zone"></span>
+                                    <span class="timeclass" name="remoteTimeArea1" class="label label-default"
+                                          title="Time of Remote"></span>
+                                </div>
+                            </div>
+
+                            <!--  Video for peer 2 -->
+                            <div class="col-12 text-center justify-content-center remote-video remote mt-2" hidden>
+                                <div class="video-inner-wrapper">
+                                    <video class="video-class" name="otherConferenceVideo2"  hidden></video>
+                                </div>
+                                <div id="remotetime2" class="timeBox">
+                                    <span class="timeclass" name="remoteTimeZoneArea2" title="Time Zone"></span>
+                                    <span class="timeclass" name="remoteTimeArea2" class="label label-default"
+                                          title="Time of Remote"></span>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+<!-- main content ends -->
+
+
+<div id="footer"></div>
+
+<div id="chat"></div>
+
+<div id="cursor"></div>
+
+<div id="help"></div>
+
+<!--Loader -->
+<div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#CDC6E9"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#615AA8"/>
+    </svg>
+    <span>
+       Establishing Connection...
+    </span></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        document.getElementById('ftco-loader').classList.remove('show');
+    });
+</script>
+</body>
+<script rel="preload" src="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.js"></script>
+<script src="node_modules/webrtcdevelopment/build/webrtcdevelopment.js"></script>
+
+<!-- Maintime Time stamp for Peers-->
+<!-- <script src="js/timekeeper.js"></script>-->
+
+<!--Initilaize widgets-->
+<script src="js/webrtc_conf.js"></script>
+<!--Call for APIs-->
+<script src="js/api.js"></script>
+<!--Web Calling-->
+<script src="js/conf.js"></script>
+<!--Common functionality like opening/closing containers -->
+<script src="js/common.js"></script>
+
+<!--to make video dragable -->
+<script src="dist/js/drag.js"></script>
+
+<link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.css">
+<link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.css">
+<link rel="stylesheet" href="dist/css/finalstyle_expanded.css">
+
+</html>

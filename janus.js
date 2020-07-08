@@ -157,42 +157,6 @@ Janus.useDefaultDependencies = function (deps) {
 	}
 };
 
-Janus.useOldDependencies = function (deps) {
-	var jq = (deps && deps.jQuery) || jQuery;
-	var socketCls = (deps && deps.WebSocket) || WebSocket;
-	return {
-		newWebSocket: function(server, proto) { return new socketCls(server, proto); },
-		isArray: function(arr) { return jq.isArray(arr); },
-		extension: (deps && deps.extension) || defaultExtension,
-		webRTCAdapter: (deps && deps.adapter) || adapter,
-		httpAPICall: function(url, options) {
-			var payload = options.body !== undefined ? {
-				contentType: 'application/json',
-				data: JSON.stringify(options.body)
-			} : {};
-			var credentials = options.withCredentials !== undefined ? {xhrFields: {withCredentials: options.withCredentials}} : {};
-
-			return jq.ajax(jq.extend(payload, credentials, {
-				url: url,
-				type: options.verb,
-				cache: false,
-				dataType: 'json',
-				async: options.async,
-				timeout: options.timeout,
-				success: function(result) {
-					if(typeof(options.success) === typeof(Janus.noop)) {
-						options.success(result);
-					}
-				},
-				error: function(xhr, status, err) {
-					if(typeof(options.error) === typeof(Janus.noop)) {
-						options.error(status, err);
-					}
-				}
-			}));
-		}
-	};
-};
 
 Janus.noop = function() {};
 
@@ -304,6 +268,7 @@ Janus.init = function(options) {
 				callback([]);
 			}
 		};
+
 		// Helper methods to attach/reattach a stream to a video element (previously part of adapter.js)
 		Janus.attachMediaStream = function(element, stream) {
 			try {
@@ -316,6 +281,7 @@ Janus.init = function(options) {
 				}
 			}
 		};
+
 		Janus.reattachMediaStream = function(to, from) {
 			try {
 				to.srcObject = from.srcObject;
@@ -612,6 +578,7 @@ function Janus(gatewayCallbacks) {
 				delete transactions[transaction];
 			}
 			return;
+
 		} else if(json["janus"] === "success") {
 			// Success!
 			Janus.debug("Got a success on session " + sessionId);
@@ -624,6 +591,7 @@ function Janus(gatewayCallbacks) {
 				delete transactions[transaction];
 			}
 			return;
+
 		} else if(json["janus"] === "trickle") {
 			// We got a trickle candidate from Janus
 			var sender = json["sender"];
@@ -658,6 +626,7 @@ function Janus(gatewayCallbacks) {
 				config.candidates.push(candidate);
 				Janus.debug(config.candidates);
 			}
+
 		} else if(json["janus"] === "webrtcup") {
 			// The PeerConnection with the server is up! Notify this
 			Janus.debug("Got a webrtcup event on session " + sessionId);
@@ -674,6 +643,7 @@ function Janus(gatewayCallbacks) {
 			}
 			pluginHandle.webrtcState(true);
 			return;
+
 		} else if(json["janus"] === "hangup") {
 			// A plugin asked the core to hangup a PeerConnection on one of our handles
 			Janus.debug("Got a hangup event on session " + sessionId);
@@ -690,6 +660,7 @@ function Janus(gatewayCallbacks) {
 			}
 			pluginHandle.webrtcState(false, json["reason"]);
 			pluginHandle.hangup();
+
 		} else if(json["janus"] === "detached") {
 			// A plugin asked the core to detach one of our handles
 			Janus.debug("Got a detached event on session " + sessionId);
@@ -707,6 +678,7 @@ function Janus(gatewayCallbacks) {
 			pluginHandle.detached = true;
 			pluginHandle.ondetached();
 			pluginHandle.detach();
+
 		} else if(json["janus"] === "media") {
 			// Media started/stopped flowing
 			Janus.debug("Got a media event on session " + sessionId);
@@ -722,6 +694,7 @@ function Janus(gatewayCallbacks) {
 				return;
 			}
 			pluginHandle.mediaState(json["type"], json["receiving"]);
+
 		} else if(json["janus"] === "slowlink") {
 			Janus.debug("Got a slowlink event on session " + sessionId);
 			Janus.debug(json);
@@ -737,6 +710,7 @@ function Janus(gatewayCallbacks) {
 				return;
 			}
 			pluginHandle.slowLink(json["uplink"], json["lost"]);
+
 		} else if(json["janus"] === "error") {
 			// Oops, something wrong happened
 			Janus.error("Ooops: " + json["error"].code + " " + json["error"].reason);	// FIXME
@@ -750,6 +724,7 @@ function Janus(gatewayCallbacks) {
 				delete transactions[transaction];
 			}
 			return;
+
 		} else if(json["janus"] === "event") {
 			Janus.debug("Got a plugin event on session " + sessionId);
 			Janus.debug(json);
@@ -785,6 +760,7 @@ function Janus(gatewayCallbacks) {
 				// Send to generic callback (?)
 				Janus.debug("No provided notification callback");
 			}
+
 		} else if(json["janus"] === "timeout") {
 			Janus.error("Timeout on session " + sessionId);
 			Janus.debug(json);
@@ -792,6 +768,7 @@ function Janus(gatewayCallbacks) {
 				ws.close(3504, "Gateway timeout");
 			}
 			return;
+
 		} else {
 			Janus.warn("Unknown message/event  '" + json["janus"] + "' on session " + sessionId);
 			Janus.debug(json);
@@ -846,6 +823,7 @@ function Janus(gatewayCallbacks) {
 				Janus.log("Server #" + (serversIndex+1) + ": trying REST API to contact Janus (" + server + ")");
 			}
 		}
+
 		if(websockets) {
 			ws = Janus.newWebSocket(server, 'janus-protocol');
 			wsHandlers = {
@@ -1759,18 +1737,21 @@ function Janus(gatewayCallbacks) {
 				pc_config["encodedInsertableStreams"] = true;
 			}
 			Janus.log("Creating PeerConnection");
-			Janus.debug(pc_constraints);
+			Janus.debug("constraints " , pc_constraints);
 			config.pc = new RTCPeerConnection(pc_config, pc_constraints);
-			Janus.debug(config.pc);
+			Janus.debug("peerconnection " , config.pc);
+			Janus.debug("peerconnection Local description SDP " , config.pc.localDescription.sdp);
 			if(config.pc.getStats) {	// FIXME
 				config.volume = {};
 				config.bitrate.value = "0 kbits/sec";
 			}
 			Janus.log("Preparing local SDP and gathering candidates (trickle=" + config.trickle + ")");
+
 			config.pc.oniceconnectionstatechange = function(e) {
 				if(config.pc)
 					pluginHandle.iceState(config.pc.iceConnectionState);
 			};
+
 			config.pc.onicecandidate = function(event) {
 				if (!event.candidate ||
 						(Janus.webRTCAdapter.browserDetails.browser === 'edge' && event.candidate.candidate.indexOf('endOfCandidates') > 0)) {
@@ -1797,6 +1778,7 @@ function Janus(gatewayCallbacks) {
 					}
 				}
 			};
+
 			config.pc.ontrack = function(event) {
 				Janus.log("Handling Remote Track");
 				Janus.debug(event);
