@@ -95,7 +95,60 @@ certificates: {
 ```
 if you see an missing encryption exception , see Issue no 8 and start janus with LD_LIBRARY_PATH 
 ```shell script
-export LD_LIBRARY_PATH=/usr/lib && /opt/janus/bin/janus --debug-level=4 --stun-server=stun.l.google.com:19302 -e --full-trickle
+export LD_LIBRARY_PATH=/usr/lib && /opt/janus/bin/janus --debug-level=7 --stun-server=stun.l.google.com:19302 --event-handlers --full-trickle
+```
+Trickle ICE Command Line params give console output as 
+```shell script
+[janus.cfg]
+    general: {
+        debug_level: 7
+    }
+    certificates: {
+    }
+    nat: {
+        stun_server: stun.l.google.com
+        stun_port: 19302
+        full_trickle: true
+    }
+    media: {
+    }
+    transports: {
+    }
+    plugins: {
+    }
+    events: {
+        broadcast: yes
+    }
+    loggers: {
+    }
+```
+
+With MAT 1:1 mapping 
+```shell script
+export LD_LIBRARY_PATH=/usr/lib && /opt/janus/bin/janus --debug-level=7 --nat-1-1=54.193.51.199 --stun-server=stun.l.google.com:19302 --rtp-port-range=20000-50000 
+```
+1to1 NAT mpapping coordinates with amazon ec2 
+```shell script
+[janus.cfg]
+    general: {
+        debug_level: 7
+    }
+    certificates: {
+    }
+    nat: {
+        nat_1_1_mapping: 54.193.51.199
+    }
+    media: {
+        rtp_port_range: 20000-50000
+    }
+    transports: {
+    }
+    plugins: {
+    }
+    events: {
+    }
+    loggers: {
+    }
 ```
 
 ## check
