@@ -18,7 +18,7 @@ var properties = {
     host: "localhost",
     jsdebug: true,
     httpsPort: 8082,
-    http2Port: 8084,
+    http2Port: 8094,
     wssPort: 8083,
     restPort: 8087,
     key: __dirname + '/../wildcard_sslcerts_2020/bc3.key',
