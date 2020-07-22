@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Janus WebRTC Server: Video Room Demo</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#5c66bf">
+    <title>MCU Brightchats </title>
+    <link rel="shortcut icon" href="dist/img/favicon.png" type="image/png"/>
+    <link rel="apple-touch-icon" href="dist/img/favicon.png">
+    <link rel="manifest" href="manifest.json">
+
+    <script rel="preload" src="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.js"></script>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js" ></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js" ></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" ></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>-->
+<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
     <script type="text/javascript" src="janus.js" ></script>
     <script type="text/javascript" src="videoroomtest.js"></script>
     <script>
@@ -23,17 +26,15 @@
             $(".footer").load("footer.html");
         });
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cerulean/bootstrap.min.css" type="text/css"/>
     <link rel="stylesheet" href="css/demo.css" type="text/css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"/>
 </head>
 <body>
 
-<a href="https://github.com/meetecho/janus-gateway"><img style="position: absolute; top: 0; left: 0; border: 0; z-index: 1001;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<div id="header"></div>
 
-<nav class="navbar navbar-default navbar-static-top">
-</nav>
+<!-- notify bar -->
+<div class="row alertDiv" id="alertBox" hidden="true"></div>
 
 <div class="container">
     <div class="row">
@@ -124,4 +125,20 @@
 </div>
 
 </body>
+
+<script src="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.js"></script>
+
+<script>
+    var iceservers_array = [];
+
+    var role = "participant", out_A = true, out_V = true;
+    var local, remote, incoming, outgoing;
+    var webrtcdevobj = null;
+    var webrtcdevsessionobj, sessionid, session;
+
+</script>
+
+<link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.css">
+<link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.css">
+
 </html>
