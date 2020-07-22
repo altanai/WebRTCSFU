@@ -1,32 +1,3 @@
-var server = null;
-if (window.location.protocol === 'http:') {
-    // server = "http://" + window.location.hostname + ":8088/janus";
-    //server = "http://54.193.51.199:8088/janus";
-    server = "ws://54.193.51.199:8188/janus";
-} else {
-    // server = "https://" + window.location.hostname + ":8089/janus";
-    //server = "https://54.193.51.199:8089/janus";
-    server = "wss://54.193.51.199:8989/ws";
-    // server = "wss://janus.conf.meetecho.com/ws";
-}
-
-var janus = null;
-var sfutest = null;
-var opaqueId = "videoroomtest-" + Janus.randomString(12);
-
-var myroom = 1234;	// Demo room
-var myusername = null;
-var myid = null;
-var mystream = null;
-// We use this other ID just to map our subscriptions to us
-var mypvtid = null;
-
-var feeds = [];
-var bitrateTimer = [];
-
-// var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
-// var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
-var doSimulcast = true;
 
 $(document).ready(function () {
     // Initialize the library (all console debuggers enabled)
@@ -38,7 +9,7 @@ $(document).ready(function () {
                 $(this).attr('disabled', true).unbind('click');
                 // Make sure the browser supports WebRTC
                 if (!Janus.isWebrtcSupported()) {
-                    bootbox.alert("No WebRTC support... ");
+                    alert("No WebRTC support... ");
                     return;
                 }
                 // Create session
@@ -56,50 +27,23 @@ $(document).ready(function () {
                                         sfutest = pluginHandle;
                                         Janus.log("Plugin attached! (" + sfutest.getPlugin() + ", id=" + sfutest.getId() + ")");
                                         Janus.log("  -- This is a publisher/manager");
+
                                         // Prepare the username registration
-                                        // Register Username
                                         var register = {
                                             request: "join",
-                                            room: "1111",
+                                            room: myroom,
                                             ptype: "publisher",
-                                            display: "yyyy"
+                                            display:myusername
                                         };
-                                        myusername = "yyyy";
+                                        myusername = myusername;
                                         sfutest.send({message: register});
-
-                                        // $('#videojoin').removeClass('hide').show();
-                                        // $('#registernow').removeClass('hide').show();
-                                        // $('#register').click(registerUsername);
-                                        // $('#username').focus();
-                                        // $('#start').removeAttr('disabled').html("Stop")
-                                        //     .click(function () {
-                                        //         $(this).attr('disabled', true);
-                                        //         janus.destroy();
-                                        //     });
                                     },
                                     error: function (error) {
                                         Janus.error("  -- Error attaching plugin...", error);
-                                        bootbox.alert("Error attaching plugin... " + error);
+                                        alert("Error attaching plugin... " + error);
                                     },
                                     consentDialog: function (on) {
                                         Janus.debug("Consent dialog should be " + (on ? "on" : "off") + " now");
-                                        if (on) {
-                                            // Darken screen and show hint
-                                            $.blockUI({
-                                                message: '<div><img src="up_arrow.png"/></div>',
-                                                css: {
-                                                    border: 'none',
-                                                    padding: '15px',
-                                                    backgroundColor: 'transparent',
-                                                    color: '#aaa',
-                                                    top: '10px',
-                                                    left: (navigator.mozGetUserMedia ? '-100px' : '300px')
-                                                }
-                                            });
-                                        } else {
-                                            // Restore screen
-                                            $.unblockUI();
-                                        }
                                     },
                                     iceState: function (state) {
                                         Janus.log("ICE state changed to " + state);

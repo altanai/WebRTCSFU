@@ -16,6 +16,32 @@
 <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>-->
 <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
     <script type="text/javascript" src="janus.js" ></script>
+
+    <script >
+
+        var server = "wss://54.193.51.199:8989/ws";
+
+
+        var janus = null;
+        var sfutest = null;
+        var opaqueId = "videoroomtest-" + Janus.randomString(12);
+
+        var myroom = 1234;	// Demo room
+        var myusername = "yyyy";
+        var myid = null;
+        var mystream = null;
+        // We use this other ID just to map our subscriptions to us
+        var mypvtid = null;
+
+        var feeds = [];
+        var bitrateTimer = [];
+
+        // var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
+        // var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
+        var doSimulcast = true;
+        var doSimulcast2 = false;
+
+    </script>
     <script type="text/javascript" src="videoroomtest.js"></script>
 
     <script>
@@ -37,7 +63,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="page-header">
-                <h1>Plugin Demo: Video Room
+                <h1>Simulcast / SFU / MCU / hybrid PoC
                     <button class="btn btn-default" autocomplete="off" id="start">Start</button>
                 </h1>
             </div>
