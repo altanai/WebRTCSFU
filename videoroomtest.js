@@ -24,13 +24,15 @@ var mypvtid = null;
 var feeds = [];
 var bitrateTimer = [];
 
-var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
-var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
+// var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
+// var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
+var doSimulcast = true;
 
 $(document).ready(function () {
     // Initialize the library (all console debuggers enabled)
     Janus.init({
-        debug: "all", callback: function () {
+        debug: "all",
+        callback: function () {
             // Use a button to start the demo
             $('#start').one('click', function () {
                 $(this).attr('disabled', true).unbind('click');
@@ -55,15 +57,25 @@ $(document).ready(function () {
                                         Janus.log("Plugin attached! (" + sfutest.getPlugin() + ", id=" + sfutest.getId() + ")");
                                         Janus.log("  -- This is a publisher/manager");
                                         // Prepare the username registration
-                                        $('#videojoin').removeClass('hide').show();
-                                        $('#registernow').removeClass('hide').show();
-                                        $('#register').click(registerUsername);
-                                        $('#username').focus();
-                                        $('#start').removeAttr('disabled').html("Stop")
-                                            .click(function () {
-                                                $(this).attr('disabled', true);
-                                                janus.destroy();
-                                            });
+                                        // Register Username
+                                        var register = {
+                                            request: "join",
+                                            room: "1111",
+                                            ptype: "publisher",
+                                            display: "yyyy"
+                                        };
+                                        myusername = "yyyy";
+                                        sfutest.send({message: register});
+
+                                        // $('#videojoin').removeClass('hide').show();
+                                        // $('#registernow').removeClass('hide').show();
+                                        // $('#register').click(registerUsername);
+                                        // $('#username').focus();
+                                        // $('#start').removeAttr('disabled').html("Stop")
+                                        //     .click(function () {
+                                        //         $(this).attr('disabled', true);
+                                        //         janus.destroy();
+                                        //     });
                                     },
                                     error: function (error) {
                                         Janus.error("  -- Error attaching plugin...", error);
@@ -203,14 +215,14 @@ $(document).ready(function () {
                                                 } else if (msg["error"]) {
                                                     if (msg["error_code"] === 426) {
                                                         // This is a "no such room" error: give a more meaningful description
-                                                        bootbox.alert(
+                                                        alert(
                                                             "<p>Apparently room <code>" + myroom + "</code> (the one this demo uses as a test room) " +
                                                             "does not exist...</p><p>Do you have an updated <code>janus.plugin.videoroom.jcfg</code> " +
                                                             "configuration file? If not, make sure you copy the details of room <code>" + myroom + "</code> " +
                                                             "from that sample in your current configuration file, then restart Janus and try again."
                                                         );
                                                     } else {
-                                                        bootbox.alert(msg["error"]);
+                                                        alert(msg["error"]);
                                                     }
                                                 }
                                             }

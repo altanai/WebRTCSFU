@@ -17,17 +17,14 @@
 <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
     <script type="text/javascript" src="janus.js" ></script>
     <script type="text/javascript" src="videoroomtest.js"></script>
+
     <script>
-        $(function() {
-            $(".navbar-static-top").load("navbar.html", function() {
-                $(".navbar-static-top li.dropdown").addClass("active");
-                $(".navbar-static-top a[href='videoroomtest.html']").parent().addClass("active");
-            });
-            $(".footer").load("footer.html");
-        });
+
+
+
     </script>
-    <link rel="stylesheet" href="css/demo.css" type="text/css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"/>
+<!--    <link rel="stylesheet" href="css/demo.css" type="text/css"/>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css"/>-->
 </head>
 <body>
 
@@ -127,7 +124,8 @@
 </body>
 
 <script src="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.js"></script>
-
+<!--Maintime Time stamp for Peers-->
+<script src="js/timekeeper.js"></script>
 <script>
     var iceservers_array = [];
 
@@ -135,6 +133,58 @@
     var local, remote, incoming, outgoing;
     var webrtcdevobj = null;
     var webrtcdevsessionobj, sessionid, session;
+
+    var selfvideo = "myAloneVideo";
+    var remotevideosarr = ["myConferenceVideo", "otherConferenceVideo1", "otherConferenceVideo2",
+        "otherConferenceVideo3", "otherConferenceVideo4", "otherConferenceVideo5"];
+
+    var username ="aaa", useremail = "bbb";
+
+    local = {
+        video: selfvideo,
+        videoClass: "video-class",
+        videoContainer: "singleVideoContainer",
+        userDisplay: true,
+        userMetaDisplay: false,
+        userdetails: {
+            username: username,
+            usercolor: '#B5B9E7',
+            useremail: useremail,
+            role: role
+        }
+    };
+
+    remote = {
+        videoarr: remotevideosarr,
+        videoClass: "video-class",
+        maxAllowed: 100,
+        videoContainer: "remote_sidebar_right",
+        userDisplay: true,
+        userMetaDisplay: false,
+        dynamicVideos: false,
+        userdetails: {
+            username: 'REMOTE',
+            usercolor: '#5c66bf',
+            useremail: 'unknown'
+        }
+    };
+
+    incoming = {
+        audio: true,
+        video: true,
+        data: true,
+        screen: true
+    };
+
+    outgoing = {
+        audio: out_A,
+        video: out_V,
+        data: true,
+        screen: true
+    };
+
+    webrtcdevobj = new webrtcdevcon();
+    console.log(" webrtceev obj ", webrtcdevobj);
 
 </script>
 
