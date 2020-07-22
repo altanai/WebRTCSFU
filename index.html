@@ -212,6 +212,98 @@
     webrtcdevobj = new webrtcdevcon();
     console.log(" webrtceev obj ", webrtcdevobj);
 
+    sessionid = webrtcdevobj.makesessionid("noreload");
+    session = {
+        sessionid: sessionid,
+        socketAddr: webrtcserver,
+        signaller: signallerserver,
+        turn: {
+            active: true,
+            iceServers: iceservers_array
+        }
+    };
+
+    var widgets =  {
+        debug: true,
+        reconnect: {
+            active: false
+        },
+        timer:{
+            active: false
+        },
+
+        chat: {
+            active: false
+        },
+
+        fileShare: {
+            active: false
+        },
+
+        mute: {
+            active: true,
+            audio: {
+                active: true,
+                button: {
+                    class_on: "pull-right videoButtonClass on",
+                    html_on: "<i class='fa fa-microphone-slash'></i>",
+                    class_off: "pull-right videoButtonClass off",
+                    html_off: "<i class='fa fa-microphone'></i>"
+                }
+            },
+            video: {
+                active: false,
+                button: {
+                    class_on: "pull-right videoButtonClass on",
+                    html_on: "<i class='fa fa-video-camera'></i>",
+                    class_off: "pull-right videoButtonClass off",
+                    html_off: "<i class='fa fa-video-camera'></i>"
+                }
+            }
+        },
+        videoRecord: {
+            active: false
+        },
+
+        snapshot: {
+            active: false
+        },
+
+        cursor: {
+            active: false
+        },
+
+        minmax: {
+            active: false
+        },
+
+        drawCanvas: {
+            active: false
+        },
+
+        screenrecord: {
+            active: false
+        },
+
+        screenshare: {
+            active: false
+        },
+
+        listenin: {
+            active: false
+        },
+
+        help: {
+            active: false
+        },
+        statistics: {
+            active: false
+        }
+    };
+    webrtcdevsessionobj = webrtcdevobj.setsession(local, remote, incoming, outgoing, session, widgets);
+
+    webrtcdevobj.startCall(webrtcdevsessionobj);
+
 </script>
 
 <link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.css">
