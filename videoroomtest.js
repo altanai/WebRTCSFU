@@ -53,7 +53,6 @@ $(document).ready(function () {
                                     },
                                     webrtcState: function (on) {
                                         Janus.log("Janus says our WebRTC PeerConnection is " + (on ? "up" : "down") + " now");
-                                        $("#videolocal").parent().parent().unblock();
                                         if (!on)
                                             return;
                                         $('#publish').remove();
@@ -209,19 +208,12 @@ $(document).ready(function () {
                                             $('#videolocal').append('<button class="btn btn-warning btn-xs" id="unpublish" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;">Unpublish</button>');
                                             $('#unpublish').click(unpublishOwnFeed);
                                         }
-                                        $('#publisher').removeClass('hide').html(myusername).show();
+                                        // $('#publisher').removeClass('hide').html(myusername).show();
                                         Janus.attachMediaStream($('#myvideo').get(0), stream);
                                         $("#myvideo").get(0).muted = "muted";
                                         if (sfutest.webrtcStuff.pc.iceConnectionState !== "completed" &&
                                             sfutest.webrtcStuff.pc.iceConnectionState !== "connected") {
-                                            $("#videolocal").parent().parent().block({
-                                                message: '<b>Publishing...</b>',
-                                                css: {
-                                                    border: 'none',
-                                                    backgroundColor: 'transparent',
-                                                    color: 'white'
-                                                }
-                                            });
+                                            console.log(" Local stream comnnected ");
                                         }
                                         var videoTracks = stream.getVideoTracks();
                                         if (!videoTracks || videoTracks.length === 0) {
@@ -257,9 +249,6 @@ $(document).ready(function () {
                         },
                         error: function (error) {
                             Janus.error(error);
-                            bootbox.alert(error, function () {
-                                window.location.reload();
-                            });
                         },
                         destroyed: function () {
                             window.location.reload();
@@ -433,12 +422,6 @@ function newRemoteFeed(id, display, audio, video) {
                         }
                         remoteFeed.rfid = msg["id"];
                         remoteFeed.rfdisplay = msg["display"];
-                        if (!remoteFeed.spinner) {
-                            var target = document.getElementById('videoremote' + remoteFeed.rfindex);
-                            remoteFeed.spinner = new Spinner({top: 100}).spin(target);
-                        } else {
-                            remoteFeed.spinner.spin();
-                        }
                         Janus.log("Successfully attached to feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") in room " + msg["room"]);
                         $('#remote' + remoteFeed.rfindex).removeClass('hide').html(remoteFeed.rfdisplay).show();
                     } else if (event === "event") {
