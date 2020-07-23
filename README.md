@@ -308,4 +308,9 @@ node_modules/http-server/bin/http-server
 open the client in webrtc supported browser at 
 http://192.168.1.111:8080/videoroomtest.html
 
+## Git 
 
+Merginng the upstream rpo changes into this repo
+```shell script
+git pull https://github.com/AmpleChat/Janus_experiments.git MCU
+```
