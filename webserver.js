@@ -18,7 +18,7 @@ var properties = {
     host: "localhost",
     jsdebug: true,
     httpsPort: 8082,
-    http2Port: 8084,
+    http2Port: 8094,
     wssPort: 8083,
     restPort: 8087,
     key: __dirname + '/../wildcard_sslcerts_2020/bc3.key',
@@ -66,7 +66,26 @@ app.listen(properties.http2Port);
 console.log("< ------------------------ HTTPS Server -------------------> ");
 console.log(" Web server env => " + properties.enviornment + " running at " + properties.http2Port);
 
-
-// console.log("< ------------------------ REST API Server -------------------> ");
-// var _restapi = require('./node_modules/webrtcdevelopment/build/webrtcdevelopmentServer.js').restapi;
-// var restapi = _restapi(realtimecomm, options, app, properties);
+//
+// var _realtimecomm = require('./node_modules/webrtcdevelopment/build/webrtcdevelopmentServer.js').realtimecomm;
+// var realtimecomm = _realtimecomm(properties, options, null, (socket) => {
+//     try {
+//         var params = socket.handshake.query;
+//
+//         if (!params.socketCustomEvent) {
+//             params.socketCustomEvent = 'custom-message';
+//         }
+//
+//         socket.on(params.socketCustomEvent, function (message) {
+//             try {
+//                 socket.broadcast.emit(params.socketCustomEvent, message);
+//             } catch (e) {
+//                 // Raven.captureException(e);
+//                 console.error(e);
+//             }
+//         });
+//     } catch (e) {
+//         // Raven.captureException(e);
+//         console.error(e);
+//     }
+// });

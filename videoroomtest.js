@@ -1,81 +1,15 @@
-// We make use of this 'server' variable to provide the address of the
-// REST Janus API. By default, in this example we assume that Janus is
-// co-located with the web server hosting the HTML pages but listening
-// on a different port (8088, the default for HTTP in Janus), which is
-// why we make use of the 'window.location.hostname' base address. Since
-// Janus can also do HTTPS, and considering we don't really want to make
-// use of HTTP for Janus if your demos are served on HTTPS, we also rely
-// on the 'window.location.protocol' prefix to build the variable, in
-// particular to also change the port used to contact Janus (8088 for
-// HTTP and 8089 for HTTPS, if enabled).
-// In case you place Janus behind an Apache frontend (as we did on the
-// online demos at http://janus.conf.meetecho.com) you can just use a
-// relative path for the variable, e.g.:
-//
-// 		var server = "/janus";
-//
-// which will take care of this on its own.
-//
-//
-// If you want to use the WebSockets frontend to Janus, instead, you'll
-// have to pass a different kind of address, e.g.:
-//
-// 		var server = "ws://" + window.location.hostname + ":8188";
-//
-// Of course this assumes that support for WebSockets has been built in
-// when compiling the server. WebSockets support has not been tested
-// as much as the REST API, so handle with care!
-//
-//
-// If you have multiple options available, and want to let the library
-// autodetect the best way to contact your server (or pool of servers),
-// you can also pass an array of servers, e.g., to provide alternative
-// means of access (e.g., try WebSockets first and, if that fails, fall
-// back to plain HTTP) or just have failover servers:
-//
-//		var server = [
-//			"ws://" + window.location.hostname + ":8188",
-//			"/janus"
-//		];
-//
-// This will tell the library to try connecting to each of the servers
-// in the presented order. The first working server will be used for
-// the whole session.
-//
-var server = null;
-// if(window.location.protocol === 'http:')
-// 	server = "http://" + window.location.hostname + ":8088/janus";
-// else
-// 	server = "https://" + window.location.hostname + ":8089/janus";
-server = "http://54.193.51.199:8089/janus";
-
-var janus = null;
-var sfutest = null;
-var opaqueId = "videoroomtest-" + Janus.randomString(12);
-
-var myroom = 1234;	// Demo room
-var myusername = null;
-var myid = null;
-var mystream = null;
-// We use this other ID just to map our subscriptions to us
-var mypvtid = null;
-
-var feeds = [];
-var bitrateTimer = [];
-
-var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
-var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
 
 $(document).ready(function () {
     // Initialize the library (all console debuggers enabled)
     Janus.init({
-        debug: "all", callback: function () {
+        debug: "all",
+        callback: function () {
             // Use a button to start the demo
             $('#start').one('click', function () {
                 $(this).attr('disabled', true).unbind('click');
                 // Make sure the browser supports WebRTC
                 if (!Janus.isWebrtcSupported()) {
-                    bootbox.alert("No WebRTC support... ");
+                    alert("No WebRTC support... ");
                     return;
                 }
                 // Create session
@@ -93,40 +27,23 @@ $(document).ready(function () {
                                         sfutest = pluginHandle;
                                         Janus.log("Plugin attached! (" + sfutest.getPlugin() + ", id=" + sfutest.getId() + ")");
                                         Janus.log("  -- This is a publisher/manager");
+
                                         // Prepare the username registration
-                                        $('#videojoin').removeClass('hide').show();
-                                        $('#registernow').removeClass('hide').show();
-                                        $('#register').click(registerUsername);
-                                        $('#username').focus();
-                                        $('#start').removeAttr('disabled').html("Stop")
-                                            .click(function () {
-                                                $(this).attr('disabled', true);
-                                                janus.destroy();
-                                            });
+                                        var register = {
+                                            request: "join",
+                                            room: myroom,
+                                            ptype: "publisher",
+                                            display:myusername
+                                        };
+                                        myusername = myusername;
+                                        sfutest.send({message: register});
                                     },
                                     error: function (error) {
                                         Janus.error("  -- Error attaching plugin...", error);
-                                        bootbox.alert("Error attaching plugin... " + error);
+                                        alert("Error attaching plugin... " + error);
                                     },
                                     consentDialog: function (on) {
                                         Janus.debug("Consent dialog should be " + (on ? "on" : "off") + " now");
-                                        if (on) {
-                                            // Darken screen and show hint
-                                            $.blockUI({
-                                                message: '<div><img src="up_arrow.png"/></div>',
-                                                css: {
-                                                    border: 'none',
-                                                    padding: '15px',
-                                                    backgroundColor: 'transparent',
-                                                    color: '#aaa',
-                                                    top: '10px',
-                                                    left: (navigator.mozGetUserMedia ? '-100px' : '300px')
-                                                }
-                                            });
-                                        } else {
-                                            // Restore screen
-                                            $.unblockUI();
-                                        }
                                     },
                                     iceState: function (state) {
                                         Janus.log("ICE state changed to " + state);
@@ -136,7 +53,6 @@ $(document).ready(function () {
                                     },
                                     webrtcState: function (on) {
                                         Janus.log("Janus says our WebRTC PeerConnection is " + (on ? "up" : "down") + " now");
-                                        $("#videolocal").parent().parent().unblock();
                                         if (!on)
                                             return;
                                         $('#publish').remove();
@@ -242,14 +158,14 @@ $(document).ready(function () {
                                                 } else if (msg["error"]) {
                                                     if (msg["error_code"] === 426) {
                                                         // This is a "no such room" error: give a more meaningful description
-                                                        bootbox.alert(
+                                                        alert(
                                                             "<p>Apparently room <code>" + myroom + "</code> (the one this demo uses as a test room) " +
                                                             "does not exist...</p><p>Do you have an updated <code>janus.plugin.videoroom.jcfg</code> " +
                                                             "configuration file? If not, make sure you copy the details of room <code>" + myroom + "</code> " +
                                                             "from that sample in your current configuration file, then restart Janus and try again."
                                                         );
                                                     } else {
-                                                        bootbox.alert(msg["error"]);
+                                                        alert(msg["error"]);
                                                     }
                                                 }
                                             }
@@ -292,19 +208,12 @@ $(document).ready(function () {
                                             $('#videolocal').append('<button class="btn btn-warning btn-xs" id="unpublish" style="position: absolute; bottom: 0px; right: 0px; margin: 15px;">Unpublish</button>');
                                             $('#unpublish').click(unpublishOwnFeed);
                                         }
-                                        $('#publisher').removeClass('hide').html(myusername).show();
+                                        // $('#publisher').removeClass('hide').html(myusername).show();
                                         Janus.attachMediaStream($('#myvideo').get(0), stream);
                                         $("#myvideo").get(0).muted = "muted";
                                         if (sfutest.webrtcStuff.pc.iceConnectionState !== "completed" &&
                                             sfutest.webrtcStuff.pc.iceConnectionState !== "connected") {
-                                            $("#videolocal").parent().parent().block({
-                                                message: '<b>Publishing...</b>',
-                                                css: {
-                                                    border: 'none',
-                                                    backgroundColor: 'transparent',
-                                                    color: 'white'
-                                                }
-                                            });
+                                            console.log(" Local stream comnnected ");
                                         }
                                         var videoTracks = stream.getVideoTracks();
                                         if (!videoTracks || videoTracks.length === 0) {
@@ -340,9 +249,6 @@ $(document).ready(function () {
                         },
                         error: function (error) {
                             Janus.error(error);
-                            bootbox.alert(error, function () {
-                                window.location.reload();
-                            });
                         },
                         destroyed: function () {
                             window.location.reload();
@@ -516,12 +422,6 @@ function newRemoteFeed(id, display, audio, video) {
                         }
                         remoteFeed.rfid = msg["id"];
                         remoteFeed.rfdisplay = msg["display"];
-                        if (!remoteFeed.spinner) {
-                            var target = document.getElementById('videoremote' + remoteFeed.rfindex);
-                            remoteFeed.spinner = new Spinner({top: 100}).spin(target);
-                        } else {
-                            remoteFeed.spinner.spin();
-                        }
                         Janus.log("Successfully attached to feed " + remoteFeed.rfid + " (" + remoteFeed.rfdisplay + ") in room " + msg["room"]);
                         $('#remote' + remoteFeed.rfindex).removeClass('hide').html(remoteFeed.rfdisplay).show();
                     } else if (event === "event") {
