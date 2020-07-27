@@ -5,7 +5,7 @@ $(document).ready(function () {
         debug: "all",
         callback: function () {
             // Use a button to start the demo
-            $('#start').one('click', function () {
+            // $('#start').one('click', function () {
                 $(this).attr('disabled', true).unbind('click');
                 // Make sure the browser supports WebRTC
                 if (!Janus.isWebrtcSupported()) {
@@ -16,7 +16,7 @@ $(document).ready(function () {
                 janus = new Janus(
                     {
                         server: server,
-                        success: function () {ls
+                        success: function () {
 
                             // Attach to VideoRoom plugin
                             janus.attach(
@@ -255,7 +255,7 @@ $(document).ready(function () {
                             window.location.reload();
                         }
                     });
-            });
+            // });
         }
     });
 });
