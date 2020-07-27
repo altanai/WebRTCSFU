@@ -93,10 +93,16 @@ certificates: {
 ```shell script
 /opt/janus/bin/janus
 ```
-if you see an missing encryption exception , see Issue no 8 and start janus with LD_LIBRARY_PATH 
+if you see a missing encryption exception , see Issue no 8 and start janus with LD_LIBRARY_PATH 
 ```shell script
 export LD_LIBRARY_PATH=/usr/lib && /opt/janus/bin/janus --debug-level=7 --stun-server=stun.l.google.com:19302 --event-handlers --full-trickle
 ```
+
+Run janus in background 
+```shell script
+export LD_LIBRARY_PATH=/usr/lib && /opt/janus/bin/janus --debug-level=7 --config=/opt/janus/etc/janus/janus.jcfg -6 >/var/log/janus.log 2>&1 &
+```
+
 Trickle ICE Command Line params give console output as 
 ```shell script
 [janus.cfg]
@@ -407,7 +413,7 @@ Depending on your setup meson may be installed in /usr/local/bin
 ```shell script
  /usr/local/bin/meson builddir
 ```
-Tun for build 
+Tune for build 
 ```shell script
 /usr/local/bin/meson builddir
 ```

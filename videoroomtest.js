@@ -16,7 +16,8 @@ $(document).ready(function () {
                 janus = new Janus(
                     {
                         server: server,
-                        success: function () {
+                        success: function () {ls
+
                             // Attach to VideoRoom plugin
                             janus.attach(
                                 {
