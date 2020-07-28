@@ -307,19 +307,24 @@ function registerUsername() {
 }
 
 function publishOwnFeed(useAudio) {
+
+    console.log(" ----------------------- publish own feed ");
+    console.log(" simulcast " , doSimulcast);
+    console.log(" simulcast2 " , doSimulcast2);
+
     // Publish our stream
     $('#publish').attr('disabled', true).unbind('click');
     sfutest.createOffer(
         {
             // Add data:true here if you want to publish datachannels as well
-            media: {audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true},	// Publishers are sendonly
+            media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true },	// Publishers are sendonly
             simulcast: doSimulcast,
             simulcast2: doSimulcast2,
             success: function (jsep) {
                 Janus.debug("Got publisher SDP!", jsep);
                 var publish = {request: "configure", audio: useAudio, video: true};
-                publish["audiocodec"] = "opus";
-                publish["videocodec"] = "vp9";
+                // publish["audiocodec"] = "opus";
+                // publish["videocodec"] = "vp9";
 
                 // refer to the text in janus.plugin.videoroom.jcfg
                 sfutest.send({message: publish, jsep: jsep});
@@ -329,7 +334,7 @@ function publishOwnFeed(useAudio) {
                 if (useAudio) {
                     publishOwnFeed(false);
                 } else {
-                    bootbox.alert("WebRTC error... " + error.message);
+                    alert("WebRTC error... " + error.message);
                     $('#publish').removeAttr('disabled').click(function () {
                         publishOwnFeed(true);
                     });
@@ -349,8 +354,8 @@ function toggleMute() {
     $('#mute').html(muted ? "Unmute" : "Mute");
 }
 
+
 function unpublishOwnFeed() {
-    // Unpublish our stream
     $('#unpublish').attr('disabled', true).unbind('click');
     var unpublish = {request: "unpublish"};
     sfutest.send({message: unpublish});
@@ -444,7 +449,7 @@ function newRemoteFeed(id, display, audio, video) {
                             media: {audioSend: false, videoSend: false},	// We want recvonly audio/video
                             success: function (jsep) {
                                 Janus.debug("Got SDP!", jsep);
-                                var body = {request: "start", room: myroom};
+                                var body = { request: "start", room: myroom };
                                 remoteFeed.send({message: body, jsep: jsep});
                             },
                             error: function (error) {
