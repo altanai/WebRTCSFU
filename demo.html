@@ -118,15 +118,11 @@
     <script rel="preload" src="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.js"></script>
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
-    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>-->
-    <!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>-->
+
     <script type="text/javascript" src="janus.js"></script>
-
-
     <script>
 
         var server = "wss://54.193.51.199:8989/ws";
-
 
         var janus = null;
         var sfutest = null;
@@ -211,43 +207,6 @@
             <div class="overlay ">
             </div>
             <div id="video-slider " class="slider responsive ">
-                <!--
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img
-                                               card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100
-                                               "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4
-                                               "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100
-                                               " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4
-                                               " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4
-                                               "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100
-                                               " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4
-                                               " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4
-                                               "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100
-                                               " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4
-                                               " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4
-                                               "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100
-                                               " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/main-video.mp4
-                                               " type="video/mp4 "> </video> </div>
-                                   <div> <video autoplay loop muted class="bd-placeholder-img card-img-top " width="100 " height="100 "> <source src="dist/videos/video2.mp4 " type="video/mp4 "> </video> </div>
-                               </div>
-                               -->
 
                 <div class="panel-body" id="videolocal"></div>
                 <div class="panel-body relative" id="videoremote1"></div>
@@ -392,6 +351,7 @@
         </div>
 </div>
 </footer>
+
 <div id="sidebar-mobile">
     <div class="btn-group" role="group" aria-label="Basic example">
         <button type="button" class="btn btn-outline-secondary">
@@ -437,9 +397,6 @@
 </div>
 
 
-<!--<script src="dist/js/popper.js "></script>-->
-<!--<script src="dist/js/bootstrap.js "></script>-->
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js "></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.5/slick.min.js "></script>
 <script src="dist/js/custom.js "></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>

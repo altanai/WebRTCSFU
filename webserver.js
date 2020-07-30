@@ -43,17 +43,17 @@ var options = {
     rejectUnauthorized: false
 };
 
-// const app = https.createServer(options, (request, response) => {
-//     request.addListener('end', function () {
-//         file.serve(request, response);
-//     }).resume();
-// });
-
-const app = http2.createSecureServer(options, (request, response) => {
+const app = https.createServer(options, (request, response) => {
     request.addListener('end', function () {
         file.serve(request, response);
     }).resume();
 });
+
+// const app = http2.createSecureServer(options, (request, response) => {
+//     request.addListener('end', function () {
+//         file.serve(request, response);
+//     }).resume();
+// });
 
 app.on('error', (err) => console.error(err));
 
