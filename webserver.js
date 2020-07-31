@@ -66,7 +66,6 @@ app.listen(properties.http2Port);
 console.log("< ------------------------ HTTPS Server -------------------> ");
 console.log(" Web server env => " + properties.enviornment + " running at " + properties.http2Port);
 
-//
 // var _realtimecomm = require('./node_modules/webrtcdevelopment/build/webrtcdevelopmentServer.js').realtimecomm;
 // var realtimecomm = _realtimecomm(properties, options, null, (socket) => {
 //     try {

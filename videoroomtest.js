@@ -118,7 +118,7 @@ $(document).ready(function () {
                                                 var leaving = msg["leaving"];
                                                 Janus.log("Publisher left: " + leaving);
                                                 var remoteFeed = null;
-                                                for (var i = 1; i < 6; i++) {
+                                                for (var i = 1; i < 20; i++) {
                                                     if (feeds[i] && feeds[i].rfid == leaving) {
                                                         remoteFeed = feeds[i];
                                                         break;
@@ -141,7 +141,7 @@ $(document).ready(function () {
                                                     return;
                                                 }
                                                 var remoteFeed = null;
-                                                for (var i = 1; i < 6; i++) {
+                                                for (var i = 1; i < 20; i++) {
                                                     if (feeds[i] && feeds[i].rfid == unpublished) {
                                                         remoteFeed = feeds[i];
                                                         break;
@@ -309,15 +309,15 @@ function registerUsername() {
 function publishOwnFeed(useAudio) {
 
     console.log(" ----------------------- publish own feed ");
-    console.log(" simulcast " , doSimulcast);
-    console.log(" simulcast2 " , doSimulcast2);
+    console.log(" simulcast ", doSimulcast);
+    console.log(" simulcast2 ", doSimulcast2);
 
     // Publish our stream
     $('#publish').attr('disabled', true).unbind('click');
     sfutest.createOffer(
         {
             // Add data:true here if you want to publish datachannels as well
-            media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true },	// Publishers are sendonly
+            media: {audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true},	// Publishers are sendonly
             simulcast: doSimulcast,
             simulcast2: doSimulcast2,
             success: function (jsep) {
@@ -410,7 +410,7 @@ function newRemoteFeed(id, display, audio, video) {
                 } else if (event) {
                     if (event === "attached") {
                         // Subscriber created and attached
-                        for (var i = 1; i < 6; i++) {
+                        for (var i = 1; i < 20; i++) {
                             if (!feeds[i]) {
                                 feeds[i] = remoteFeed;
                                 remoteFeed.rfindex = i;
@@ -449,7 +449,7 @@ function newRemoteFeed(id, display, audio, video) {
                             media: {audioSend: false, videoSend: false},	// We want recvonly audio/video
                             success: function (jsep) {
                                 Janus.debug("Got SDP!", jsep);
-                                var body = { request: "start", room: myroom };
+                                var body = {request: "start", room: myroom};
                                 remoteFeed.send({message: body, jsep: jsep});
                             },
                             error: function (error) {
@@ -471,6 +471,7 @@ function newRemoteFeed(id, display, audio, video) {
             onremotestream: function (stream) {
                 Janus.debug("Remote feed #" + remoteFeed.rfindex + ", stream:", stream);
                 var addButtons = false;
+
                 if ($('#remotevideo' + remoteFeed.rfindex).length === 0) {
                     addButtons = true;
                     // No remote video yet
