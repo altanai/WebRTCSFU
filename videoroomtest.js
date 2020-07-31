@@ -1,3 +1,5 @@
+var npublishers = 20;
+
 $(document).ready(function () {
 
     Janus.init({
@@ -118,7 +120,7 @@ $(document).ready(function () {
                                                 var leaving = msg["leaving"];
                                                 Janus.log("Publisher left: " + leaving);
                                                 var remoteFeed = null;
-                                                for (var i = 1; i < 20; i++) {
+                                                for (var i = 1; i < npublishers; i++) {
                                                     if (feeds[i] && feeds[i].rfid == leaving) {
                                                         remoteFeed = feeds[i];
                                                         break;
@@ -141,7 +143,7 @@ $(document).ready(function () {
                                                     return;
                                                 }
                                                 var remoteFeed = null;
-                                                for (var i = 1; i < 20; i++) {
+                                                for (var i = 1; i < npublishers; i++) {
                                                     if (feeds[i] && feeds[i].rfid == unpublished) {
                                                         remoteFeed = feeds[i];
                                                         break;
@@ -399,18 +401,18 @@ function newRemoteFeed(id, display, audio, video) {
             },
             error: function (error) {
                 Janus.error("  -- Error attaching plugin...", error);
-                bootbox.alert("Error attaching plugin... " + error);
+                alert("Error attaching plugin... " + error);
             },
             onmessage: function (msg, jsep) {
                 Janus.debug(" ::: Got a message (subscriber) :::", msg);
                 var event = msg["videoroom"];
                 Janus.debug("Event: " + event);
                 if (msg["error"]) {
-                    bootbox.alert(msg["error"]);
+                    alert(msg["error"]);
                 } else if (event) {
                     if (event === "attached") {
                         // Subscriber created and attached
-                        for (var i = 1; i < 20; i++) {
+                        for (var i = 1; i < npublishers; i++) {
                             if (!feeds[i]) {
                                 feeds[i] = remoteFeed;
                                 remoteFeed.rfindex = i;
