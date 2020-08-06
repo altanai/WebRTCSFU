@@ -66,7 +66,6 @@ $(document).ready(function () {
                                         echotest = pluginHandle;
                                         Janus.log("Plugin attached! (" + echotest.getPlugin() + ", id=" + echotest.getId() + ")");
 
-
                                         // Negotiate WebRTC
                                         var body = {audio: true, video: true};
                                         // We can try and force a specific codec, by telling the plugin what we'd prefer

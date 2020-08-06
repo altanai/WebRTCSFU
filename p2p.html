@@ -379,6 +379,11 @@
 
 </main>
 
+<div class="container-fluid mt-3 ">
+    <div class="row " id="screenShareRow">
+    <h3> Row </h3>
+    </div>
+</div>
 <!--<div class="container-fluid mt-3 ">-->
 <!--    <div class="row ">-->
 <!--        <div class="col-md-12 heroSlider-fixed ">-->
@@ -457,7 +462,9 @@
                                 </svg>
                                 <div class="animate-normal ">Draw</div>
                             </button>
-                            <button>
+
+                            <!--  Screen Share Button -->
+                            <button id="screenShareBtn">
                                 <svg class="bi bi-box-arrow-up-right " width="1em " height="1em " viewBox="0 0 16 16 "
                                      fill="currentColor " xmlns="http://www.w3.org/2000/svg ">
                                     <path fill-rule="evenodd " d="M1.5 13A1.5 1.5 0 0 0 3 14.5h8a1.5 1.5 0 0 0 1.5-1.5V9a.5.5 0 0 0-1 0v4a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 0 0-1H3A1.5 1.5 0 0 0 1.5 5v8zm7-11a.5.5
@@ -467,6 +474,8 @@
                                 </svg>
                                 <div class="animate-normal ">Screen Share</div>
                             </button>
+
+
                             <button>
                                 <svg class="bi bi-power " width="1em " height="1em " viewBox="0 0 16 16 "
                                      fill="currentColor " xmlns="http://www.w3.org/2000/svg ">
@@ -728,7 +737,26 @@
         },
 
         screenshare: {
-            active: false
+            active: webrtcdevobj.issafari ? false : true,
+            screenshareContainer: "screenShareRow",
+            button: {
+                shareButton: {
+                    id: "screenShareButton",
+                    class_on: "amplechat-icon-screen-sharing on blink_me",
+                    html_on: '',
+                    class_off: "amplechat-icon-screen-sharing off",
+                    html_off: '',
+                    class_busy: "amplechat-icon-screen-sharing on blink_me inactiveSpan",
+                    html_busy: ''
+                },
+                viewButton: {
+                    id: "scrViewButton",
+                    class_on: "screeninstall-btn on",
+                    html_on: "Stop Viewing",
+                    class_off: "screeninstall-btn off",
+                    html_off: "View Screen"
+                }
+            }
         },
 
         listenin: {
