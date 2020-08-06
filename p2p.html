@@ -623,16 +623,30 @@
         }
     };
 
+    // incoming = {
+    //     audio: true,
+    //     video: true,
+    //     data: true,
+    //     screen: true
+    // };
+    //
+    // outgoing = {
+    //     audio: out_A,
+    //     video: out_V,
+    //     data: true,
+    //     screen: true
+    // };
+
     incoming = {
-        audio: true,
-        video: true,
+        audio: false,
+        video: false,
         data: true,
         screen: true
     };
 
     outgoing = {
-        audio: out_A,
-        video: out_V,
+        audio: false,
+        video: false,
         data: true,
         screen: true
     };
@@ -669,7 +683,7 @@
         },
 
         mute: {
-            active: true,
+            active: false,
             audio: {
                 active: true,
                 button: {
@@ -724,6 +738,7 @@
         help: {
             active: false
         },
+
         statistics: {
             active: false
         }
