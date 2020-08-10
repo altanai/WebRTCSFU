@@ -175,7 +175,6 @@ $(window).on('load', function () {
 
     }).then(function () {
 
-
         switch (role) {
             case "inspector":
                 var overlayDiv = document.createElement("div");
