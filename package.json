@@ -22,6 +22,6 @@
   "dependencies": {
     "http-server": "^0.12.3",
     "node-static": "^0.7.11",
-    "webrtcdevelopment": "^6.0.4"
+    "webrtcdevelopment": "^6.1.1"
   }
 }

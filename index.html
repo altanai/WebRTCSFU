@@ -454,7 +454,11 @@
     var webrtcserver = "https://dev.brightchats.com:8083/";
     var signallerserver = "https://dev.brightchats.com:8085/";
 
-    var iceservers_array = [];
+    var iceservers_array = [{urls: ["stun:bn-turn1.xirsys.com"]}, {
+        username: "ZtPyQ1BNDSOJxHpnLhpjbIzbvuOBwbQN_hRAZl6klXMcujLzCE89nuyjfUa73XktAAAAAF7qRMNmYXJvb2thZnNhcmk=",
+        credential: "a0c6968a-b0b7-11ea-9434-0242ac140004",
+        urls: ["turn:bn-turn1.xirsys.com:80?transport=udp", "turn:bn-turn1.xirsys.com:3478?transport=udp", "turn:bn-turn1.xirsys.com:80?transport=tcp", "turn:bn-turn1.xirsys.com:3478?transport=tcp", "turns:bn-turn1.xirsys.com:443?transport=tcp", "turns:bn-turn1.xirsys.com:5349?transport=tcp"]
+    }];
 
     var role = "participant";
     var local, remote, incoming, outgoing;
@@ -674,7 +678,8 @@
     var doSimulcast2 = false;
 
 </script>
-<!--    <script type="text/javascript" src="js/videoroomtest.js"></script>-->
+
+<script type="text/javascript" src="js/videoroomtest.js"></script>
 
 <link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.css">
 <link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.css">

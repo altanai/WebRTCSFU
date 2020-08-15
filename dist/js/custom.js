@@ -12,12 +12,14 @@ window.onload = () => {
         button.addEventListener("mouseover", () => {
             if (index > 0) {
                 const prevTooltip = buttons[index - 1].querySelector("div");
-                prevTooltip.classList.remove("animate-right");
-                prevTooltip.classList.add("animate-left");
+                if(prevTooltip){
+                    prevTooltip.classList.remove("animate-right");
+                    prevTooltip.classList.add("animate-left");
+                }
             }
             if (index < buttons.length - 1) {
                 const nextTooltip = buttons[index + 1].querySelector("div");
-                if (nextTooltip.classList) {
+                if (nextTooltip && nextTooltip.classList) {
                     nextTooltip.classList.remove("animate-left");
                     nextTooltip.classList.add("animate-right");
                 }
