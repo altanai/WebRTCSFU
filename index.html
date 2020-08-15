@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P2P | Meeting Room</title>
     <link rel="stylesheet" href="dist/css/bootstrap.css">
-    <link rel="stylesheet" href="dist/css/custom.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.5/slick.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
@@ -119,36 +118,15 @@
     <script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
 
-    <script type="text/javascript" src="janus.js"></script>
-    <script>
+    <script type="text/javascript" src="js/janus.js"></script>
 
-        var server = "wss://54.193.51.199:8989/ws";
-
-        var janus = null;
-        var sfutest = null;
-        var opaqueId = "videoroomtest-" + Janus.randomString(12);
-
-        var myroom = 1234;	// Demo room
-        var myusername = "yyyy";
-        var myid = null;
-        var mystream = null;
-        // We use this other ID just to map our subscriptions to us
-        var mypvtid = null;
-
-        var feeds = [];
-        var bitrateTimer = [];
-
-        // var doSimulcast = (getQueryStringValue("simulcast") === "yes" || getQueryStringValue("simulcast") === "true");
-        // var doSimulcast2 = (getQueryStringValue("simulcast2") === "yes" || getQueryStringValue("simulcast2") === "true");
-        var doSimulcast = true;
-        var doSimulcast2 = false;
-
-    </script>
-    <script type="text/javascript" src="videoroomtest.js"></script>
 </head>
 
 
 <body class="d-flex flex-column h-100">
+
+<!-- notify bar -->
+<div class="row alertDiv" id="alertBox" hidden="true"></div>
 
 <main id="main" class="flex-shrink-0">
     <div class="album py-1 bg-dark">
@@ -160,7 +138,7 @@
 
             <div id="drawBoardRow" class="draw-section" hidden></div>
 
-            <div class="row" id="screenShareRow"hidden>
+            <div class="row" id="screenShareRow" hidden>
                 <h3> File Row </h3>
             </div>
 
@@ -171,130 +149,12 @@
                 <div class="col peerVideo">
                     <div class="card shadow-sm">
                         <div class="panel-body" id="videolocal"></div>
-
-                        <!--                        <div class="card-body peercontrols">-->
-                        <!--                            <div class="d-flex justify-content-between align-items-center "><small class="voice-active">-->
-                        <!--                                <svg xmlns="http://www.w3.org/2000/svg " class="metting-equilizer " width="24 "-->
-                        <!--                                     height="24 " viewBox="0 0 24 24 ">-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;1 " x="4 " y="4 " width="3.7 " height="8 "/>-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;2 " x="10.2 " y="4 " width="3.7 " height="16 "/>-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;3 " x="16.3 " y="4 " width="3.7 " height="11 "/>-->
-                        <!--                                </svg>-->
-                        <!--                            </small> <span class="peer-name">Altanai Bist</span>-->
-                        <!--                                <div class="btn-group ">-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Mute " data-toggle="tooltip " data-placement="bottom " title="Mute ">-->
-                        <!--                                        <svg class="bi bi-mic-mute-fill " width="1em " height="1em "-->
-                        <!--                                             viewBox="0 0 16 16 " fill="currentColor "-->
-                        <!--                                             xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M12.734 9.613A4.995 4.995 0 0 0 13 8V7a.5.5 0 0 0-1 0v1c0 .274-.027.54-.08.799l.814.814zm-2.522 1.72A4 4 0 0 1 4 8V7a.5.5 0 0 0-1 0v1a5 5 0 0 0 4.5 4.975V15h-3a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-3v-2.025a4.973 4.973 0 0 0 2.43-.923l-.718-.719zM11 7.88V3a3 3 0 0 0-5.842-.963L11 7.879zM5 6.12l4.486 4.486A3 3 0 0 1 5 8V6.121zm8.646 7.234l-12-12 .708-.708 12 12-.708.707z "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Expand ">-->
-                        <!--                                        <svg class="bi bi-arrows-fullscreen " width="1em " height="1em "-->
-                        <!--                                             viewBox="0 0 16 16 " fill="currentColor "-->
-                        <!--                                             xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M1.464 10.536a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3.5a.5.5 0 0 1-.5-.5v-3.5a.5.5 0 0 1 .5-.5z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M5.964 10a.5.5 0 0 1 0 .707l-4.146 4.147a.5.5 0 0 1-.707-.708L5.257 10a.5.5 0 0 1 .707 0zm8.854-8.854a.5.5 0 0 1 0 .708L10.672 6a.5.5 0 0 1-.708-.707l4.147-4.147a.5.5 0 0 1 .707 0z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M10.5 1.5A.5.5 0 0 1 11 1h3.5a.5.5 0 0 1 .5.5V5a.5.5 0 0 1-1 0V2h-3a.5.5 0 0 1-.5-.5zm4 9a.5.5 0 0 0-.5.5v3h-3a.5.5 0 0 0 0 1h3.5a.5.5 0 0 0 .5-.5V11a.5.5 0 0 0-.5-.5z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M10 9.964a.5.5 0 0 0 0 .708l4.146 4.146a.5.5 0 0 0 .708-.707l-4.147-4.147a.5.5 0 0 0-.707 0zM1.182 1.146a.5.5 0 0 0 0 .708L5.328 6a.5.5 0 0 0 .708-.707L1.889 1.146a.5.5 0 0 0-.707 0z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M5.5 1.5A.5.5 0 0 0 5 1H1.5a.5.5 0 0 0-.5.5V5a.5.5 0 0 0 1 0V2h3a.5.5 0 0 0 .5-.5z "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Record ">-->
-                        <!--                                        <svg class="bi bi-circle-fill " width="1em " height="1em " viewBox="0 0 16 16 "-->
-                        <!--                                             fill="currentColor " xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <circle cx="8 " cy="8 " r="8 "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Video Off ">-->
-                        <!--                                        <svg class="bi bi-camera-video-off-fill " width="1em " height="1em "-->
-                        <!--                                             viewBox="0 0 16 16 " fill="currentColor "-->
-                        <!--                                             xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path d="M1.429 3.55A1.66 1.66 0 0 0 1 4.667v6.666C1 12.253 1.746 13 2.667 13h6.666c.43 0 .821-.162 1.117-.429l-9.02-9.02zm13.111 8.868a.798.798 0 0 0 .46-.726V4.308c0-.63-.693-1.01-1.233-.696L11 5.218v-.551C11 3.747 10.254 3 9.333 3H5.121l9.419 9.418z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M13.646 14.354l-12-12 .708-.708 12 12-.708.707z "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
                     </div>
                 </div>
                 <div class="col peerVideo ">
                     <div class="card shadow-sm ">
                         <div class=" bd-placeholder-img card-img-top panel-body relative" id="videoremote1"
                              width="100% " height="225 "></div>
-
-                        <!--                        <div class="card-body peercontrols ">-->
-                        <!--                            <div class="d-flex justify-content-between-->
-                        <!--                                align-items-center "><small class="voice-active ">-->
-                        <!--                                <svg xmlns="http://www.w3.org/2000/svg " class="metting-equilizer " width="24 "-->
-                        <!--                                     height="24 " viewBox="0 0 24 24 ">-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;1 " x="4 " y="4 " width="3.7-->
-                        <!--                                " height="8 "/>-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;2 " x="10.2 " y="4 " width="3.7 " height="16 "/>-->
-                        <!--                                    <rect class="eq-bar eq-bar&#45;&#45;3 " x="16.3 " y="4 " width="3.7 " height="11 "/>-->
-                        <!--                                </svg>-->
-                        <!--                            </small> <span class="peer-name-->
-                        <!--                                ">Altanai Bist</span>-->
-                        <!--                                <div class="btn-group ">-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Mute " data-toggle="tooltip " data-placement="bottom " title="Mute ">-->
-                        <!--                                        <svg class="bi bi-mic-mute-fill " width="1em " height="1em-->
-                        <!--                                " viewBox="0 0 16 16 " fill="currentColor " xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path fill-rule="evenodd " d="M12.734 9.613A4.995 4.995 0 0 0 13 8V7a.5.5 0 0 0-1 0v1c0 .274-.027.54-.08.799l.814.814zm-2.522 1.72A4 4 0 0 1 4 8V7a.5.5-->
-                        <!--                                0 0 0-1 0v1a5 5 0 0 0 4.5 4.975V15h-3a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-3v-2.025a4.973 4.973 0 0 0 2.43-.923l-.718-.719zM11 7.88V3a3 3 0 0 0-5.842-.963L11 7.879zM5 6.12l4.486 4.486A3 3 0 0 1 5 8V6.121zm8.646 7.234l-12-12 .708-.708-->
-                        <!--                                12 12-.708.707z "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Expand ">-->
-                        <!--                                        <svg class="bi bi-arrows-fullscreen " width="1em " height="1em "-->
-                        <!--                                             viewBox="0 0 16 16 " fill="currentColor-->
-                        <!--                                " xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M1.464 10.536a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3.5a.5.5 0 0 1-.5-.5v-3.5a.5.5 0 0 1 .5-.5z "/>-->
-                        <!--                                            <path fill-rule="evenodd " d="M5.964 10a.5.5 0 0 1 0 .707l-4.146-->
-                        <!--                                4.147a.5.5 0 0 1-.707-.708L5.257 10a.5.5 0 0 1 .707 0zm8.854-8.854a.5.5 0 0 1 0 .708L10.672 6a.5.5 0 0 1-.708-.707l4.147-4.147a.5.5 0 0 1 .707 0z "/>-->
-                        <!--                                            <path fill-rule="evenodd " d="M10.5 1.5A.5.5 0 0 1 11 1h3.5a.5.5 0 0 1 .5.5V5a.5.5-->
-                        <!--                                0 0 1-1 0V2h-3a.5.5 0 0 1-.5-.5zm4 9a.5.5 0 0 0-.5.5v3h-3a.5.5 0 0 0 0 1h3.5a.5.5 0 0 0 .5-.5V11a.5.5 0 0 0-.5-.5z "/>-->
-                        <!--                                            <path fill-rule="evenodd " d="M10 9.964a.5.5 0 0 0 0 .708l4.146 4.146a.5.5 0 0 0 .708-.707l-4.147-4.147a.5.5-->
-                        <!--                                0 0 0-.707 0zM1.182 1.146a.5.5 0 0 0 0 .708L5.328 6a.5.5 0 0 0 .708-.707L1.889 1.146a.5.5 0 0 0-.707 0z "/>-->
-                        <!--                                            <path fill-rule="evenodd " d="M5.5 1.5A.5.5 0 0 0 5 1H1.5a.5.5 0 0 0-.5.5V5a.5.5 0 0 0 1 0V2h3a.5.5 0 0 0 .5-.5z-->
-                        <!--                                "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Record ">-->
-                        <!--                                        <svg class="bi bi-circle-fill " width="1em " height="1em " viewBox="0 0 16 16 "-->
-                        <!--                                             fill="currentColor " xmlns="http://www.w3.org/2000/svg-->
-                        <!--                                ">-->
-                        <!--                                            <circle cx="8 " cy="8 " r="8 "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                    <button type="button " class="btn btn-sm btn-outline-secondary controlButtons "-->
-                        <!--                                            ref="Video Off ">-->
-                        <!--                                        <svg class="bi bi-camera-video-off-fill " width="1em " height="1em " viewBox="0 0 16 16-->
-                        <!--                                " fill="currentColor " xmlns="http://www.w3.org/2000/svg ">-->
-                        <!--                                            <path d="M1.429 3.55A1.66 1.66 0 0 0 1 4.667v6.666C1 12.253 1.746 13 2.667 13h6.666c.43 0 .821-.162 1.117-.429l-9.02-9.02zm13.111 8.868a.798.798 0 0 0 .46-.726V4.308c0-.63-.693-1.01-1.233-.696L11-->
-                        <!--                                5.218v-.551C11 3.747 10.254 3 9.333 3H5.121l9.419 9.418z "/>-->
-                        <!--                                            <path fill-rule="evenodd "-->
-                        <!--                                                  d="M13.646 14.354l-12-12 .708-.708 12 12-.708.707z "/>-->
-                        <!--                                        </svg>-->
-                        <!--                                    </button>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                        </div>-->
                     </div>
                 </div>
                 <div class="col peerVideo">
@@ -408,53 +268,7 @@
             </div>
         </div>
     </div>
-
-
 </main>
-
-<!--<div class="container-fluid mt-3 ">-->
-<!--    <div class="row ">-->
-<!--        <div class="col-md-12 heroSlider-fixed ">-->
-<!--            <div class="overlay ">-->
-<!--            </div>-->
-<!--            <div id="video-slider " class="slider responsive ">-->
-<!--                <div class="panel-body" id="videolocal"></div>-->
-<!--                <div class="panel-body relative" id="videoremote1"></div>-->
-<!--                <div class="panel-body relative" id="videoremote2"></div>-->
-<!--                <div class="panel-body relative" id="videoremote3"></div>-->
-<!--                <div class="panel-body relative" id="videoremote4"></div>-->
-<!--                <div class="panel-body relative" id="videoremote5"></div>-->
-
-<!--                <div class="panel-body relative" id="videoremote6"></div>-->
-<!--                <div class="panel-body relative" id="videoremote7"></div>-->
-<!--                <div class="panel-body relative" id="videoremote8"></div>-->
-<!--                <div class="panel-body relative" id="videoremote9"></div>-->
-<!--                <div class="panel-body relative" id="videoremote10"></div>-->
-
-<!--                <div class="panel-body relative" id="videoremote11"></div>-->
-<!--                <div class="panel-body relative" id="videoremote12"></div>-->
-<!--                <div class="panel-body relative" id="videoremote13"></div>-->
-<!--                <div class="panel-body relative" id="videoremote14"></div>-->
-<!--                <div class="panel-body relative" id="videoremote15"></div>-->
-
-<!--                <div class="panel-body relative" id="videoremote16"></div>-->
-<!--                <div class="panel-body relative" id="videoremote17"></div>-->
-<!--                <div class="panel-body relative" id="videoremote18"></div>-->
-<!--                <div class="panel-body relative" id="videoremote19"></div>-->
-<!--                <div class="panel-body relative" id="videoremote20"></div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; control arrows &ndash;&gt;-->
-<!--            <div class="prev ">-->
-<!--                <span class="glyphicon glyphicon-chevron-left " aria-hidden="true "></span>-->
-<!--            </div>-->
-<!--            <div class="next ">-->
-<!--                <span class="glyphicon glyphicon-chevron-right " aria-hidden="true "></span>-->
-<!--            </div>-->
-
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
 
 <footer id="footer " class="footer py-3 text-center text-small mt-3 ">
 
@@ -554,7 +368,6 @@
     </div>
 </footer>
 
-
 <!-- chat box starts -->
 <div id="chat-circle" class="btn btn-raised">
     <div id="chat-overlay"></div>
@@ -580,7 +393,6 @@
     </div>
 </div>
 <!-- chat box ends -->
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.5/slick.min.js "></script>
 <script ser="./dist/ja/switch.js "></script>
@@ -632,9 +444,10 @@
 
 </body>
 
+<!-- Webrtc Dev script -->
+<script src="node_modules/webrtcdevelopment/build/webrtcdevelopment.js"></script>
 
-<script src="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.js"></script>
-<!--Maintime Time stamp for Peers-->
+<!-- Main Time stamp for Peers-->
 <script src="js/timekeeper.js"></script>
 <script>
 
@@ -643,7 +456,7 @@
 
     var iceservers_array = [];
 
-    var role = "participant", out_A = true, out_V = true;
+    var role = "participant";
     var local, remote, incoming, outgoing;
     var webrtcdevobj = null;
     var webrtcdevsessionobj, sessionid, session;
@@ -683,20 +496,6 @@
         }
     };
 
-    // incoming = {
-    //     audio: true,
-    //     video: true,
-    //     data: true,
-    //     screen: true
-    // };
-    //
-    // outgoing = {
-    //     audio: out_A,
-    //     video: out_V,
-    //     data: true,
-    //     screen: true
-    // };
-
     incoming = {
         audio: false,
         video: false,
@@ -720,7 +519,7 @@
         socketAddr: webrtcserver,
         signaller: signallerserver,
         turn: {
-            active: true,
+            active: false,
             iceServers: iceservers_array
         }
     };
@@ -735,7 +534,24 @@
         },
 
         chat: {
-            active: false
+            active: true,
+            container: {
+                id: "chatContainer"
+            },
+            inputBox: {
+                text_id: "chatInputText",
+                sendbutton_id: "chatSendButton",
+                minbutton_id: "minimizeChatButton"
+            },
+            chatBox: {
+                id: "chatBoard"
+            },
+            button: {
+                class_on: "btn btn-warning glyphicon glyphicon-font topPanelButton",
+                html_on: "Chat",
+                class_off: "btn btn-success glyphicon glyphicon-font topPanelButton",
+                html_off: "Chat"
+            }
         },
 
         fileShare: {
@@ -780,7 +596,7 @@
         },
 
         drawCanvas: {
-            active: true,
+            active: false,
             drawCanvasContainer: "drawBoardRow",
             button: {
                 id: "draw-webrtc",
@@ -835,9 +651,33 @@
     webrtcdevobj.startCall(webrtcdevsessionobj);
 
 </script>
+<script src="dist/js/chatbox.js"></script>
+
+
+<script>
+    var server = "wss://54.193.51.199:8989/ws";
+
+    var janus = null;
+    var sfutest = null;
+    var opaqueId = "videoroomtest-" + Janus.randomString(12);
+
+    var myroom = 1234;
+    var myusername = "yyyy";
+    var myid = null;
+    var mystream = null;
+    var mypvtid = null;
+
+    var feeds = [];
+    var bitrateTimer = [];
+
+    var doSimulcast = true;
+    var doSimulcast2 = false;
+
+</script>
+<!--    <script type="text/javascript" src="js/videoroomtest.js"></script>-->
 
 <link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_header.css">
 <link rel=stylesheet href="node_modules/webrtcdevelopment/build/webrtcdevelopment_min.css">
-
+<link rel="stylesheet" href="dist/css/custom.css">
 
 </html>

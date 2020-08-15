@@ -1,6 +1,6 @@
 //for tooltip
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
-var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
     return new bootstrap.Tooltip(tooltipTriggerEl)
 })
 
@@ -17,8 +17,10 @@ window.onload = () => {
             }
             if (index < buttons.length - 1) {
                 const nextTooltip = buttons[index + 1].querySelector("div");
-                nextTooltip.classList.remove("animate-left");
-                nextTooltip.classList.add("animate-right");
+                if (nextTooltip.classList) {
+                    nextTooltip.classList.remove("animate-left");
+                    nextTooltip.classList.add("animate-right");
+                }
             }
         });
     });
@@ -26,6 +28,7 @@ window.onload = () => {
 
 // file share click
 let contentElement = document.getElementById("main");
+
 async function onButtonClicked() {
     $('.slick-slider').css('dispaly', 'block');
     let files = await selectFile("image/*", true);
